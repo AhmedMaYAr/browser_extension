@@ -8,19 +8,28 @@
 <body>
   <header class="app-header">
     <div class="brand">
-      <img src="icons/icon32.png" alt="" width="20" height="20" />
-      <span>PubMed Article Explorer</span>
+      <img src="icons/icon32.png" alt="" width="26" height="26" />
+      <div class="brand-text">
+        <span class="brand-title">PubMed Article Explorer</span>
+        <span class="brand-subtitle">Literature search · NCBI E-utilities</span>
+      </div>
     </div>
     <button id="openOptions" class="icon-btn" title="Settings" aria-label="Settings">⚙</button>
   </header>
 
   <form id="searchForm" class="search-bar">
-    <input
-      id="searchInput"
-      type="text"
-      placeholder="Search by keyword, gene, disease, author…"
-      autocomplete="off"
-    />
+    <div class="search-input-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <line x1="21" y1="21" x2="15.2" y2="15.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="Search by keyword, gene, disease, author…"
+        autocomplete="off"
+      />
+    </div>
     <select id="sortSelect" title="Sort by">
       <option value="relevance">Best match</option>
       <option value="date">Most recent</option>
@@ -45,28 +54,45 @@
         <button class="expand-btn" aria-expanded="false">Details ▾</button>
       </header>
       <p class="card-meta"></p>
+      <div class="card-badges">
+        <span class="badge badge-journal"></span>
+        <span class="badge badge-pmid"></span>
+      </div>
       <div class="card-body" hidden>
         <div class="abstract-block">
-          <h4>Abstract</h4>
+          <h4><span class="section-dot dot-abstract"></span>Abstract</h4>
           <p class="abstract-text loading">Loading abstract…</p>
         </div>
 
         <div class="report-block">
           <div class="report-head">
-            <h4>Short report</h4>
+            <h4><span class="section-dot dot-report"></span>Short report</h4>
             <button class="ai-report-btn ghost-btn" hidden>✨ AI report</button>
           </div>
           <div class="report-content"></div>
         </div>
 
         <div class="related-block">
-          <h4>Related articles</h4>
+          <h4><span class="section-dot dot-related"></span>Related articles</h4>
           <ul class="related-list loading-list"><li>Finding related articles…</li></ul>
         </div>
 
-        <a class="pubmed-link" target="_blank" rel="noopener">View on PubMed ↗</a>
+        <a class="pubmed-link" target="_blank" rel="noopener">
+          View full record on PubMed
+          <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true">
+            <path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
       </div>
     </article>
+  </template>
+
+  <template id="relatedItemTemplate">
+    <li class="related-item">
+      <a class="related-title" target="_blank" rel="noopener"></a>
+      <div class="related-meta"></div>
+      <div class="relevance-track"><div class="relevance-fill"></div></div>
+    </li>
   </template>
 
   <script src="popup.js" type="module"></script>

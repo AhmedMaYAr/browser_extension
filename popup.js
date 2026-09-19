@@ -14,6 +14,7 @@ const els = {
   nextPage: document.getElementById('nextPage'),
   openOptions: document.getElementById('openOptions'),
   template: document.getElementById('resultTemplate'),
+  relatedTemplate: document.getElementById('relatedItemTemplate'),
 };
 
 const state = {
@@ -119,13 +120,21 @@ function buildCard(article) {
   const card = node.querySelector('.card');
   const title = node.querySelector('.card-title');
   const meta = node.querySelector('.card-meta');
+  const journalBadge = node.querySelector('.badge-journal');
+  const pmidBadge = node.querySelector('.badge-pmid');
   const expandBtn = node.querySelector('.expand-btn');
   const body = node.querySelector('.card-body');
   const link = node.querySelector('.pubmed-link');
 
   title.textContent = article.title;
   const authorStr = formatAuthors(article.authors);
-  meta.textContent = [authorStr, article.journal, article.pubdate].filter(Boolean).join(' · ');
+  meta.textContent = [authorStr, article.pubdate].filter(Boolean).join(' · ');
+  if (article.journal) {
+    journalBadge.textContent = article.journal;
+  } else {
+    journalBadge.remove();
+  }
+  pmidBadge.textContent = `PMID: ${article.pmid}`;
   link.href = `https://pubmed.ncbi.nlm.nih.gov/${article.pmid}/`;
 
   let loaded = false;
@@ -249,20 +258,21 @@ function renderRelated(listEl, related) {
     listEl.innerHTML = '<li>No closely related articles found.</li>';
     return;
   }
+  const maxScore = Math.max(...related.map((r) => r.score || 0), 1);
+  const frag = document.createDocumentFragment();
   for (const item of related) {
-    const li = document.createElement('li');
-    const a = document.createElement('a');
+    const node = els.relatedTemplate.content.cloneNode(true);
+    const a = node.querySelector('.related-title');
     a.href = `https://pubmed.ncbi.nlm.nih.gov/${item.pmid}/`;
-    a.target = '_blank';
-    a.rel = 'noopener';
     a.textContent = item.title;
-    li.appendChild(a);
-    const meta = document.createElement('div');
-    meta.className = 'related-meta';
-    meta.textContent = [item.journal, item.pubdate].filter(Boolean).join(' · ');
-    li.appendChild(meta);
-    listEl.appendChild(li);
+    node.querySelector('.related-meta').textContent = [item.journal, item.pubdate]
+      .filter(Boolean)
+      .join(' · ');
+    const pct = Math.max(6, Math.round(((item.score || 0) / maxScore) * 100));
+    node.querySelector('.relevance-fill').style.width = `${pct}%`;
+    frag.appendChild(node);
   }
+  listEl.appendChild(frag);
 }
 
 function escapeHtml(str) {

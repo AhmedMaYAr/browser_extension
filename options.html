@@ -7,12 +7,60 @@
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     max-width: 560px;
-    margin: 32px auto;
+    margin: 0 auto 40px;
     padding: 0 20px;
     color: #111827;
+    background-color: #f6f7fb;
+    background-image: radial-gradient(circle, rgba(55, 48, 163, 0.06) 1px, transparent 1px);
+    background-size: 16px 16px;
   }
-  h1 { font-size: 18px; }
-  h2 { font-size: 14px; margin-top: 28px; color: #374151; }
+  .settings-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 -20px 24px;
+    padding: 18px 20px;
+    background: linear-gradient(135deg, #3730a3, #0e7490);
+    color: white;
+  }
+  .settings-header img {
+    border-radius: 8px;
+  }
+  .settings-header h1 {
+    font-size: 15.5px;
+    margin: 0;
+  }
+  .settings-header p {
+    margin: 2px 0 0;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.78);
+  }
+  h2 {
+    font-size: 12px;
+    margin-top: 30px;
+    color: var(--teal, #0e7490);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  h2::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #f59e0b;
+    display: inline-block;
+  }
+  .panel {
+    background: white;
+    border: 1px solid #e2e5ea;
+    border-radius: 10px;
+    padding: 16px 18px 18px;
+  }
   p.hint { font-size: 12.5px; color: #6b7280; margin-top: 4px; }
   label { display: block; font-size: 13px; font-weight: 600; margin-top: 14px; }
   input[type="text"], input[type="password"], input[type="email"], select {
@@ -26,7 +74,7 @@
   }
   button {
     margin-top: 20px;
-    background: #2563eb;
+    background: linear-gradient(135deg, #3730a3, #0e7490);
     color: white;
     border: none;
     border-radius: 8px;
@@ -35,7 +83,7 @@
     font-weight: 600;
     cursor: pointer;
   }
-  button:hover { background: #1d4ed8; }
+  button:hover { filter: brightness(1.08); }
   #savedMsg {
     display: inline-block;
     margin-left: 10px;
@@ -45,41 +93,51 @@
     transition: opacity 0.2s;
   }
   #savedMsg.show { opacity: 1; }
-  a { color: #2563eb; }
+  a { color: #3730a3; }
 </style>
 </head>
 <body>
-  <h1>PubMed Article Explorer — Settings</h1>
+  <div class="settings-header">
+    <img src="icons/icon48.png" alt="" width="34" height="34" />
+    <div>
+      <h1>PubMed Article Explorer</h1>
+      <p>Settings</p>
+    </div>
+  </div>
 
-  <h2>NCBI E-utilities (optional, but recommended)</h2>
-  <p class="hint">
-    An NCBI API key raises your rate limit from 3 to 10 requests/second, so searches and
-    related-article lookups run faster. Get a free key from your
-    <a href="https://www.ncbi.nlm.nih.gov/account/settings/" target="_blank" rel="noopener">NCBI account settings</a>.
-  </p>
-  <label for="ncbiApiKey">NCBI API key</label>
-  <input type="password" id="ncbiApiKey" placeholder="Optional" autocomplete="off" />
+  <div class="panel">
+    <h2>NCBI E-utilities</h2>
+    <p class="hint">
+      Optional, but recommended. An NCBI API key raises your rate limit from 3 to 10
+      requests/second, so searches and related-article lookups run faster. Get a free key from
+      your <a href="https://www.ncbi.nlm.nih.gov/account/settings/" target="_blank" rel="noopener">NCBI account settings</a>.
+    </p>
+    <label for="ncbiApiKey">NCBI API key</label>
+    <input type="password" id="ncbiApiKey" placeholder="Optional" autocomplete="off" />
 
-  <label for="ncbiEmail">Contact email</label>
-  <input type="email" id="ncbiEmail" placeholder="Optional — sent to NCBI per their usage policy" autocomplete="off" />
+    <label for="ncbiEmail">Contact email</label>
+    <input type="email" id="ncbiEmail" placeholder="Optional — sent to NCBI per their usage policy" autocomplete="off" />
+  </div>
 
-  <h2>AI-enhanced reports (optional)</h2>
-  <p class="hint">
-    Without a key, each article gets a quick summary extracted directly from its abstract —
-    no external calls. Add your own Anthropic API key to also get a one-click AI-written
-    report (background / key finding / relevance). The key is stored only in this browser
-    and is sent solely to api.anthropic.com when you click "AI report".
-    Get a key from the <a href="https://console.anthropic.com/" target="_blank" rel="noopener">Anthropic Console</a>.
-  </p>
-  <label for="anthropicApiKey">Anthropic API key</label>
-  <input type="password" id="anthropicApiKey" placeholder="Optional — sk-ant-..." autocomplete="off" />
+  <div class="panel" style="margin-top: 14px;">
+    <h2>AI-enhanced reports</h2>
+    <p class="hint">
+      Optional. Without a key, each article gets a quick summary extracted directly from its
+      abstract — no external calls. Add your own Anthropic API key to also get a one-click
+      AI-written report (background / key finding / relevance). The key is stored only in this
+      browser and is sent solely to api.anthropic.com when you click "AI report".
+      Get a key from the <a href="https://console.anthropic.com/" target="_blank" rel="noopener">Anthropic Console</a>.
+    </p>
+    <label for="anthropicApiKey">Anthropic API key</label>
+    <input type="password" id="anthropicApiKey" placeholder="Optional — sk-ant-..." autocomplete="off" />
 
-  <label for="anthropicModel">Model</label>
-  <select id="anthropicModel">
-    <option value="claude-opus-5">Claude Opus 5 (highest quality, default)</option>
-    <option value="claude-sonnet-5">Claude Sonnet 5 (balanced)</option>
-    <option value="claude-haiku-4-5">Claude Haiku 4.5 (fastest / cheapest)</option>
-  </select>
+    <label for="anthropicModel">Model</label>
+    <select id="anthropicModel">
+      <option value="claude-opus-5">Claude Opus 5 (highest quality, default)</option>
+      <option value="claude-sonnet-5">Claude Sonnet 5 (balanced)</option>
+      <option value="claude-haiku-4-5">Claude Haiku 4.5 (fastest / cheapest)</option>
+    </select>
+  </div>
 
   <div>
     <button id="save">Save settings</button>
